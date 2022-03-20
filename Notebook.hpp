@@ -9,15 +9,12 @@
 #include "Page.hpp"
 
 using namespace std;
-#ifndef NOTEBOOKA_NOTEBOOK_HPP
-#define NOTEBOOKA_NOTEBOOK_HPP
+
 namespace ariel {
     class Notebook {
         vector<Page> notebook;
-
     public:
         Notebook();
-    };
 
     void write(unsigned int page, unsigned int row, unsigned int column, Direction d, string to_write);
 
@@ -26,5 +23,6 @@ namespace ariel {
     void erase(unsigned int page, unsigned int row, unsigned int column, ariel::Direction d, unsigned int length);
 
     void show(unsigned int page);
+    };
 }
-#endif //NOTEBOOKA_NOTEBOOK_HPP
+
