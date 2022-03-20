@@ -12,13 +12,15 @@ using namespace std;
 
 class Page {
     // Each page consists of a vector of rows. each row is an array of 100 chars.
-    vector<array<char,100>> page ;
+    vector<array<char, 100>> page;
 public:
-    Page() {
-        for (int i = 0; i <page.size() ; ++i) {
-            for (int j = 0; j <100 ; ++j) {
-                page.at(i)[j]='_';
-            }
-        }
-    }
+    Page();
+
+    int size();
+
+    void ResizePage(int rows_to_add);
+
+    void write_to_page(unsigned int row , unsigned int column , char char_to_write);
+
+    char read_from_page(unsigned int row , unsigned int column);
 };
