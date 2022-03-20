@@ -11,32 +11,27 @@
 
 using namespace std;
 
-namespace ariel {
-    class Notebook {
-        double re, im;
+using namespace ariel;
 
-    public:
-        Notebook() { re = im = 999; }    // inline constructor
-        Notebook(double re, double im);  // "outline" constructor
-
-        string to_string() {           // inline method
-            return std::to_string(re) + "+" + std::to_string(im) + "i";
-        }
-
-    };
-
-    void write(unsigned int page, unsigned int row, unsigned int column, ariel::Direction d, string to_write) {
-
+Notebook::Notebook() {
+    for (int i = 0; i < notebook.size(); ++i) {
+        notebook[i] = Page();
     }
+};
 
-    string read(unsigned int page, unsigned int row, unsigned int column, ariel::Direction d, unsigned int length) {
+void write(unsigned int page, unsigned int row, unsigned int column, ariel::Direction d, string to_write) {
+    //first we create a pointer to the page we wish to work on
+}
 
-    }
-    void erase(unsigned int page, unsigned int row, unsigned int column, ariel::Direction d, unsigned int length) {
-
-    }
-    void show(unsigned int page) {
-
-    }
+string read(unsigned int page, unsigned int row, unsigned int column, ariel::Direction d, unsigned int length) {
 
 }
+
+void erase(unsigned int page, unsigned int row, unsigned int column, ariel::Direction d, unsigned int length) {
+
+}
+
+void show(unsigned int page) {
+
+}
+
