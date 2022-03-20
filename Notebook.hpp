@@ -16,13 +16,17 @@ namespace ariel {
     public:
         Notebook();
 
-    void write(unsigned int page, unsigned int row, unsigned int column, Direction d, string to_write);
 
-    string read(unsigned int page, unsigned int row, unsigned int column, ariel::Direction d, unsigned int length);
+    void ResizeNotebook(vector<Page> &notebook, unsigned int pages_to_add) ;
 
-    void erase(unsigned int page, unsigned int row, unsigned int column, ariel::Direction d, unsigned int length);
+    void write(unsigned int page_num, unsigned int row, unsigned int column, Direction d, string to_write);
 
-    void show(unsigned int page);
+    string read(unsigned int page_num, unsigned int row, unsigned int column, ariel::Direction d, unsigned int length);
+
+    void erase(unsigned int page_num, unsigned int row, unsigned int column, ariel::Direction d, unsigned int length);
+
+    void show(unsigned int page_num);
+
     };
 }
 

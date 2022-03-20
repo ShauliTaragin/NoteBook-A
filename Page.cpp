@@ -13,22 +13,24 @@ using namespace std;
 
 Page::Page() {
     // Each page consists of a vector of rows. each row is an array of 100 chars.
-    for (int i = 0; i < this->page.size(); ++i) {
-        for (int j = 0; j < 100; ++j) {
+    for (unsigned int i = 0; i < this->page.size(); ++i) {
+        for (unsigned int j = 0; j < 100; ++j) {
             this->page.at(i)[j] = '_';
         }
     }
 }
 
-int Page::size() {
+unsigned int Page::size() {
     return this->page.size();
 }
 
-void Page::ResizePage(int rows_to_add) {
-    array<char, 100> row;
-    fill_n(row, 100, '_');
+void Page::ResizePage(unsigned int rows_to_add) {
+    array<char, 100> row{};
+    for (unsigned int i = 0; i <100 ; ++i) {
+        row[i] = '_';
+    }
     int size = this->page.size();
-    for (int i = size; i < rows_to_add; i++) {
+    for (auto i = size; i < rows_to_add; i++) {
         this->page.push_back(row);
     }
 }

@@ -1,6 +1,7 @@
 //
 // Created by shaul on 20/03/2022.
 //
+#pragma once
 #include <iostream>
 #include <vector>
 #include <array>
@@ -16,9 +17,9 @@ class Page {
 public:
     Page();
 
-    int size();
+    unsigned int size();
 
-    void ResizePage(int rows_to_add);
+    void ResizePage(unsigned int rows_to_add);
 
     void write_to_page(unsigned int row , unsigned int column , char char_to_write);
 
