@@ -1,8 +1,24 @@
 //
 // Created by shaul on 20/03/2022.
 //
+#include <iostream>
+#include <vector>
+#include <array>
+#include <stdexcept>
+#include <algorithm>
+#include "Direction.hpp"
 
-#ifndef NOTEBOOKA_PAGE_H
-#define NOTEBOOKA_PAGE_H
+using namespace std;
 
-#endif //NOTEBOOKA_PAGE_H
+class Page {
+    // Each page consists of a vector of rows. each row is an array of 100 chars.
+    vector<array<char,100>> page ;
+public:
+    Page() {
+        for (int i = 0; i <page.size() ; ++i) {
+            for (int j = 0; j <100 ; ++j) {
+                page.at(i)[j]='_';
+            }
+        }
+    }
+};
