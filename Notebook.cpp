@@ -83,7 +83,7 @@ string Notebook::read(unsigned int page_num, unsigned int row, unsigned int colu
         }
         else{//row is not empty
             for (unsigned int i = 0; i <length ; ++i) {
-                what_I_read += this->notebook[key_to_check][row+i];
+                what_I_read += this->notebook[key_to_check][column+i];
             }
         }
         return what_I_read;

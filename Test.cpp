@@ -29,18 +29,47 @@ TEST_CASE("simple page test") {
             CHECK(notebook.read(0,12,10,Direction::Horizontal, 1) == "c");
             CHECK(notebook.read(0,13,10,Direction::Horizontal, 1) == "d");
 
+    notebook.write(0,50,50,Direction::Horizontal, "abcdefghijklmnopqrstuvwxyz");
+    for (unsigned int i = 0; i <26 ; ++i) {
+        string letter;
+        letter += char(97+i);
+        CHECK(notebook.read(0,50,50+i,Direction::Horizontal, 1) == letter);
+    }
+
+    notebook.write(2,50,50,Direction::Vertical, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");//now we check Vertically
+    for (unsigned int i = 0; i <26 ; ++i) {
+        string letter;
+        letter += char(65+i);
+                CHECK(notebook.read(2,50+i,50,Direction::Horizontal, 1) == letter);
+    }
 }
 
 
-//TEST_CASE("test empty line") {
-//
-//    notebook.write(15,15,Direction::Vertical, "abcd");
-//            CHECK(notebook.read(1,1,Direction::Vertical, 4) == "____");
-//            CHECK(notebook.read(14,15,Direction::Vertical, 2) == "_a");
-//            CHECK(notebook.read(14,15,Direction::Vertical, 3) == "_ab");
-//            CHECK(notebook.read(14,15,Direction::Vertical, 4) == "_abc");
-//            CHECK(notebook.read(14,15,Direction::Vertical, 5) == "_abcd");
-//            CHECK(notebook.read(14,15,Direction::Vertical, 6) == "_abcd_");
-//
-//}
+TEST_CASE("test erasing") {
+
+    notebook.write(1,15,15,Direction::Vertical, "grau");
+            CHECK(notebook.read(1,1,1,Direction::Vertical, 4) == "____");
+            CHECK(notebook.read(1,14,15,Direction::Vertical, 2) == "_g");
+            CHECK(notebook.read(1,14,15,Direction::Vertical, 3) == "_gr");
+            CHECK(notebook.read(1,14,15,Direction::Vertical, 4) == "_gra");
+            CHECK(notebook.read(1,14,15,Direction::Vertical, 5) == "_grau");
+            CHECK(notebook.read(1,14,15,Direction::Vertical, 6) == "_grau_");
+
+    notebook.erase(1,16,15,Direction::Vertical, 7);
+            CHECK(notebook.read(1,15,15,Direction::Vertical, 9) == "g~~~~~~~_");
+            CHECK(notebook.read(1,14,15,Direction::Vertical, 2) == "_g");
+            CHECK(notebook.read(1,14,15,Direction::Vertical, 3) == "_g~");
+            CHECK(notebook.read(1,13,15,Direction::Vertical, 5) == "__g~~");
+            CHECK(notebook.read(1,16,14,Direction::Horizontal, 3) == "_~_");
+            //I now want to test that even though we only wrote 1 letter in row 15 (since we wrote vertically) all row 15 is filled.
+            for (unsigned int i = 0; i <100 ; ++i) {
+                if(i==15){
+                    CHECK(notebook.read(1,15,i,Direction::Horizontal, 1) == "g");
+                }
+                else{
+                    CHECK(notebook.read(1,15,i,Direction::Horizontal, 1) == "_");
+                }
+            }
+
+}
 
