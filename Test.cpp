@@ -12,7 +12,7 @@ using namespace ariel;
 
 ariel::Notebook notebook;
 
-TEST_CASE("simple page test") {
+TEST_CASE("Simple Page Test") {
 
     notebook.write(0,0,20,Direction::Horizontal, "rich");
             CHECK(notebook.read(0,0,20,Direction::Horizontal, 4) == "rich");
@@ -30,22 +30,22 @@ TEST_CASE("simple page test") {
             CHECK(notebook.read(0,13,10,Direction::Horizontal, 1) == "d");
 
     notebook.write(0,50,50,Direction::Horizontal, "abcdefghijklmnopqrstuvwxyz");
-    for (unsigned int i = 0; i <26 ; ++i) {
-        string letter;
-        letter += char(97+i);
-        CHECK(notebook.read(0,50,50+i,Direction::Horizontal, 1) == letter);
-    }
+        for (unsigned int i = 0; i <26 ; ++i) {
+            string letter;
+            letter += char(97+i);
+            CHECK(notebook.read(0,50,50+i,Direction::Horizontal, 1) == letter);
+        }
 
     notebook.write(2,50,50,Direction::Vertical, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");//now we check Vertically
-    for (unsigned int i = 0; i <26 ; ++i) {
-        string letter;
-        letter += char(65+i);
-                CHECK(notebook.read(2,50+i,50,Direction::Horizontal, 1) == letter);
-    }
+        for (unsigned int i = 0; i <26 ; ++i) {
+            string letter;
+            letter += char(65+i);
+            CHECK(notebook.read(2,50+i,50,Direction::Horizontal, 1) == letter);
+        }
 }
 
 
-TEST_CASE("test erasing") {
+TEST_CASE("Test Erasing") {
 
     notebook.write(1,15,15,Direction::Vertical, "grau");
             CHECK(notebook.read(1,1,1,Direction::Vertical, 4) == "____");
@@ -62,14 +62,47 @@ TEST_CASE("test erasing") {
             CHECK(notebook.read(1,13,15,Direction::Vertical, 5) == "__g~~");
             CHECK(notebook.read(1,16,14,Direction::Horizontal, 3) == "_~_");
             //I now want to test that even though we only wrote 1 letter in row 15 (since we wrote vertically) all row 15 is filled.
-            for (unsigned int i = 0; i <100 ; ++i) {
-                if(i==15){
-                    CHECK(notebook.read(1,15,i,Direction::Horizontal, 1) == "g");
-                }
-                else{
-                    CHECK(notebook.read(1,15,i,Direction::Horizontal, 1) == "_");
-                }
-            }
-
+    for (unsigned int i = 0; i <100 ; ++i) {
+        if(i==15){
+            CHECK(notebook.read(1,15,i,Direction::Horizontal, 1) == "g");
+        }
+        else{
+            CHECK(notebook.read(1,15,i,Direction::Horizontal, 1) == "_");
+        }
+    }
 }
+TEST_CASE ("Bad input - Sentence too long") {
+        string sentence;
+        for (int i = 0; i <101 ; ++i) {
+            sentence+='a';
+        }
+            CHECK_THROWS(notebook.write(14,0,15,Direction::Vertical, sentence));
+            CHECK_THROWS(notebook.write(15,78,15,Direction::Vertical, sentence));//checking that it doesn't matter where we start our sentence from
+            CHECK_THROWS(notebook.write(14,0,15,Direction::Horizontal, sentence));
+            CHECK_THROWS(notebook.write(15,78,15,Direction::Horizontal, sentence));
+            CHECK_THROWS(notebook.read(1,0,15,Direction::Vertical, 100));
+            CHECK_THROWS(notebook.read(1,17,0,Direction::Vertical, 1253));
+            CHECK_THROWS(notebook.read(1,0,15,Direction::Horizontal, 100));
+            CHECK_THROWS(notebook.read(1,17,0,Direction::Horizontal, 125));
+            CHECK_THROWS(notebook.erase(1,0,15,Direction::Vertical, 100));
+            CHECK_THROWS(notebook.erase(1,17,0,Direction::Vertical, 1253));
+            CHECK_THROWS(notebook.erase(1,0,15,Direction::Horizontal, 100));
+            CHECK_THROWS(notebook.erase(1,17,0,Direction::Horizontal, 125));
+}
+//write test for negative numbers
+//write test for wiritng in illeagal space
+//write test for starting to write correctly and then skipping
+//TEST_CASE ("Bad input - Even number") {
+//            CHECK_THROWS(mat(10, 5, '$', '%'));
+//            CHECK_THROWS(mat(15, 2, 'a', 'g'));
+//            CHECK_THROWS(mat(2, 4, '2', '4'));
+//            CHECK_THROWS(mat(46, 100, '#', '7'));
+//}
+//TEST_CASE ("Bad input - Bad Symbol") {
+//            CHECK_THROWS(mat(13, 11, '\n', '%'));
+//            CHECK_THROWS(mat(15, 41, 'a', '\t'));
+//            CHECK_THROWS(mat(9, 57, '2', '\0'));
+//            CHECK_THROWS(mat(43, 101, ' ', '7'));
+//            CHECK_THROWS(mat(141, 55, '\r', '\0'));
+//}
 
