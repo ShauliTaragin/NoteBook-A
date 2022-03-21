@@ -7,15 +7,15 @@
 #include <algorithm>
 #include "Direction.hpp"
 #include "Page.hpp"
+#include <unordered_map>
 
 using namespace std;
 
 namespace ariel {
     class Notebook {
-        vector<Page> notebook;
-    public:
-        Notebook();
 
+    public:
+        unordered_map<string , array<char,100>> notebook;
 
     void ResizeNotebook(vector<Page> &notebook, unsigned int pages_to_add) ;
 
