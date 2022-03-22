@@ -17,13 +17,13 @@ namespace ariel {
         unordered_map<string , array<char,100>> notebook;
 
 
-    void write(unsigned int page_num, unsigned int row, unsigned int column, Direction d, string to_write);
+    void write(int page_num, int row, int column, Direction d, string to_write);
 
-    string read(unsigned int page_num, unsigned int row, unsigned int column, ariel::Direction d, unsigned int length);
+    string read(int page_num, int row, int column, ariel::Direction d, int length);
 
-    void erase(unsigned int page_num, unsigned int row, unsigned int column, ariel::Direction d, unsigned int length);
+    void erase(int page_num, int row, int column, ariel::Direction d, int length);
 
-    void show(unsigned int page_num);
+    void show(int page_num);
 
     };
 }

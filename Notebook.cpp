@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "Direction.hpp"
 #include "Notebook.hpp"
+#include <string>
 
 using namespace std;
 
@@ -13,7 +14,7 @@ using namespace ariel;
 
 
 void
-Notebook::write(unsigned int page_num, unsigned int row, unsigned int column, ariel::Direction d, string to_write) {
+Notebook::write(int page_num, int row, int column, ariel::Direction d, string to_write) {
     //we first deal with 3 cases for which we need to throw an exception.
     if (to_write.length() > 99) {
         throw invalid_argument("Your message is too long");
@@ -31,7 +32,7 @@ Notebook::write(unsigned int page_num, unsigned int row, unsigned int column, ar
     }
     //If we reached here we know we should be writing the message.
     if (d == Direction::Horizontal) {//we will work 2 cases either writing Horizontal or Vertical
-        if(column+to_write.length() > 100){
+        if(static_cast<unsigned long>(column)+ to_write.length()> 100){
             throw invalid_argument("Your message is too long");
         }
         string key_to_add = to_string(page_num) + "," + to_string(row);
@@ -41,18 +42,18 @@ Notebook::write(unsigned int page_num, unsigned int row, unsigned int column, ar
             for (unsigned int j = 0; j < 100; ++j) {
                 row_to_add[j] = '_';
             }
-            for (unsigned int j = 0; j < to_write.length(); ++j) {
-                row_to_add[column + j] = to_write.at(j);
+            for (unsigned long j = 0; j < to_write.length(); ++j) {
+                row_to_add[static_cast<unsigned long>(column)+j] = to_write.at(j);
             }
             this->notebook[key_to_add] = row_to_add;//if this wont work consider first adding array to map and then changing it
         } else {//the row already exits, and we have room to write where we need
             for (unsigned int j = 0; j < to_write.length(); ++j) {
-                notebook[key_to_add][column + j] = to_write.at(j);
+                notebook[key_to_add][static_cast<unsigned long>(column) + j] = to_write.at(j);
             }
         }
     } else {//direction is Vertical
         for (unsigned int i = 0; i < to_write.length(); ++i) {
-            string key_to_add = to_string(page_num) + "," + to_string(row + i);
+            string key_to_add = to_string(page_num) + "," + to_string(static_cast<unsigned long>(row) + i);
 
             if (this->notebook.find(key_to_add) == this->notebook.end()) {//if The row does not exist yet
                 //then we create it by adding '_' to all of it and the char in its correct location
@@ -60,16 +61,16 @@ Notebook::write(unsigned int page_num, unsigned int row, unsigned int column, ar
                 for (unsigned int j = 0; j < 100; ++j) {
                     row_to_add[j] = '_';
                 }
-                row_to_add[column] = to_write.at(i);
+                row_to_add[static_cast<unsigned long>(column)] = to_write.at(i);
                 this->notebook[key_to_add] = row_to_add;//if this wont work consider first adding array to map and then changing it
             } else {//the row already exits, and we have room to write where we need
-                this->notebook[key_to_add][column] = to_write.at(i);
+                this->notebook[key_to_add][static_cast<unsigned long>(column)] = to_write.at(i);
             }
         }
     }
 }
 
-string Notebook::read(unsigned int page_num, unsigned int row, unsigned int column, ariel::Direction d, unsigned int length) {
+string Notebook::read(int page_num, int row, int column, ariel::Direction d, int length) {
     if (length > 99) {
         throw invalid_argument("Your message is too long");
     }
@@ -89,19 +90,19 @@ string Notebook::read(unsigned int page_num, unsigned int row, unsigned int colu
         }
         else{//row is not empty
             for (unsigned int i = 0; i <length ; ++i) {
-                what_I_read += this->notebook[key_to_check][column+i];
+                what_I_read += this->notebook[key_to_check][static_cast<unsigned long>(column)+i];
             }
         }
         return what_I_read;
     }
     else {//direction is Vertical
         string what_I_read;
-        for (unsigned int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++) {
             string key_to_check = to_string(page_num) + "," + to_string(row+i);
             if (this->notebook.find(key_to_check) == this->notebook.end()) {//row is empty!
                 what_I_read+='_';
             } else {//row is not empty
-                what_I_read += this->notebook[key_to_check][column];
+                what_I_read += this->notebook[key_to_check][static_cast<unsigned long>(column)];
             }
         }
         return what_I_read;
@@ -110,7 +111,7 @@ string Notebook::read(unsigned int page_num, unsigned int row, unsigned int colu
 
 
 void
-Notebook::erase(unsigned int page_num, unsigned int row, unsigned int column, ariel::Direction d,unsigned int length) {
+Notebook::erase(int page_num, int row, int column, ariel::Direction d,int length) {
     if (length > 99) {
         throw invalid_argument("Your message is too long");
     }
@@ -122,25 +123,25 @@ Notebook::erase(unsigned int page_num, unsigned int row, unsigned int column, ar
             throw invalid_argument("Your message is too long");
         }
         string key_to_check = to_string(page_num) + "," + to_string(row);
-        unsigned int column_iterator =row;
+        int column_iterator =row;
         for (int i = 0; i <length ; ++i) {
             if(column_iterator > 99){ // if we need to move to a new row we do that.
                 key_to_check = to_string(page_num) + "," + to_string(row+1);
                 column_iterator=0;
             }
-            this->notebook[key_to_check][column_iterator]='~';
+            this->notebook[key_to_check][static_cast<unsigned long>(column_iterator)]='~';
         }
     }
     else{
-        for (unsigned int i = 0; i <length ; ++i) {
+        for (int i = 0; i <length ; ++i) {
             string key_to_check = to_string(page_num) + "," + to_string(row+i);
-                this->notebook[key_to_check][column]= '~';
+            this->notebook[key_to_check][static_cast<unsigned long>(column)]= '~';
         }
     }
 
 }
 
-void Notebook::show(unsigned int page_num) {
+void Notebook::show(int page_num) {
 
 }
 

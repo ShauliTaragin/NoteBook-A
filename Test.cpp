@@ -30,23 +30,23 @@ TEST_CASE("Simple Page Test") {
             CHECK(notebook.read(0,13,10,Direction::Horizontal, 1) == "d");
 
     notebook.write(0,50,50,Direction::Horizontal, "abcdefghijklmnopqrstuvwxyz");
-        for (unsigned int i = 0; i <26 ; ++i) {
+        for (int i = 0; i <26 ; ++i) {
             string letter;
             letter += char(97+i);
             CHECK(notebook.read(0,50,50+i,Direction::Horizontal, 1) == letter);
         }
 
     notebook.write(2,50,50,Direction::Vertical, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");//now we check Vertically
-        for (unsigned int i = 0; i <26 ; ++i) {
+        for (int i = 0; i <26 ; ++i) {
             string letter;
             letter += char(65+i);
             CHECK(notebook.read(2,50+i,50,Direction::Horizontal, 1) == letter);
         }
     //Lets test some large numbers
-    for (unsigned int i = 0; i <8000 ; ++i) {
+    for (int i = 0; i <8000 ; ++i) {
         notebook.write(2,700+i,10,Direction::Horizontal, "$");//now we check Vertically
     }
-    for (unsigned int i = 0; i <8000 ; ++i) {
+    for (int i = 0; i <8000 ; ++i) {
             CHECK(notebook.read(2,700+i,10,Direction::Horizontal, 1) == "$");
     }
 }
@@ -69,7 +69,7 @@ TEST_CASE("Test Erasing") {
             CHECK(notebook.read(1,13,15,Direction::Vertical, 5) == "__g~~");
             CHECK(notebook.read(1,16,14,Direction::Horizontal, 3) == "_~_");
             //I now want to test that even though we only wrote 1 letter in row 15 (since we wrote vertically) all row 15 is filled.
-    for (unsigned int i = 0; i <99 ; ++i) {
+    for (int i = 0; i <99 ; ++i) {
         if(i==15){
             CHECK(notebook.read(1,15,i,Direction::Horizontal, 1) == "g");
         }
@@ -112,7 +112,30 @@ TEST_CASE ("Bad input - Sentence in bad location") {
             CHECK_THROWS(notebook.read(7,0,76,Direction::Horizontal, 30));
             CHECK_THROWS(notebook.read(7,5,40,Direction::Horizontal, 78));
             CHECK_THROWS(notebook.read(7,10,76,Direction::Horizontal, 30));
-            CHECK_THROWS(notebook.read(7,8,40,Direction::Horizontal, 78));
+            CHECK_THROWS(notebook.erase(7,8,40,Direction::Horizontal, 78));
             CHECK_THROWS(notebook.erase(1,17,17,Direction::Horizontal, 90));
 }
-
+TEST_CASE ("Bad input - Negative numbers") {
+            CHECK_THROWS(notebook.write(7,-1,15,Direction::Vertical, "sentence"));
+            CHECK_THROWS(notebook.write(-1,4,14,Direction::Vertical, "sentence"));
+            CHECK_THROWS(notebook.write(7,7,-10,Direction::Vertical, "sentence"));
+            CHECK_THROWS(notebook.write(7,-1,15,Direction::Horizontal, "sentence"));
+            CHECK_THROWS(notebook.write(-1,4,14,Direction::Horizontal, "sentence"));
+            CHECK_THROWS(notebook.write(7,7,-10,Direction::Horizontal, "sentence"));
+            CHECK_THROWS(notebook.read(-7,0,1,Direction::Horizontal, 30));
+            CHECK_THROWS(notebook.read(7,-5,2,Direction::Horizontal, 78));
+            CHECK_THROWS(notebook.read(7,10,-2,Direction::Horizontal, 30));
+            CHECK_THROWS(notebook.read(7,10,2,Direction::Horizontal, -4));
+            CHECK_THROWS(notebook.read(-7,0,1,Direction::Vertical, 7));
+            CHECK_THROWS(notebook.read(7,-5,2,Direction::Vertical, 8));
+            CHECK_THROWS(notebook.read(7,10,-2,Direction::Vertical, 2));
+            CHECK_THROWS(notebook.read(7,10,2,Direction::Vertical, -4));
+            CHECK_THROWS(notebook.erase(-7,0,1,Direction::Horizontal, 30));
+            CHECK_THROWS(notebook.erase(7,-5,2,Direction::Horizontal, 78));
+            CHECK_THROWS(notebook.erase(7,10,-2,Direction::Horizontal, 30));
+            CHECK_THROWS(notebook.erase(7,10,2,Direction::Horizontal, -4));
+            CHECK_THROWS(notebook.erase(-7,0,1,Direction::Vertical, 7));
+            CHECK_THROWS(notebook.erase(7,-5,2,Direction::Vertical, 8));
+            CHECK_THROWS(notebook.erase(7,10,-2,Direction::Vertical, 2));
+            CHECK_THROWS(notebook.erase(7,10,2,Direction::Vertical, -4));
+}
