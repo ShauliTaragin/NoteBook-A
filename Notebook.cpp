@@ -18,7 +18,7 @@ Notebook::write(unsigned int page_num, unsigned int row, unsigned int column, ar
     if (to_write.length() > 99) {
         throw invalid_argument("Your message is too long");
     }
-    if (page_num < 0 || row < 0 || column < 0) {
+    if (page_num < 0 || row < 0 || column < 0|| to_write.length() < 0) {
         throw invalid_argument("Please enter only positive parameters");
     }
     //last case is if there is no room to write in that location.
@@ -31,6 +31,9 @@ Notebook::write(unsigned int page_num, unsigned int row, unsigned int column, ar
     }
     //If we reached here we know we should be writing the message.
     if (d == Direction::Horizontal) {//we will work 2 cases either writing Horizontal or Vertical
+        if(column+to_write.length() > 100){
+            throw invalid_argument("Your message is too long");
+        }
         string key_to_add = to_string(page_num) + "," + to_string(row);
 
         if (this->notebook.find(key_to_add) == this->notebook.end()) {//if The row does not exist yet
@@ -70,10 +73,13 @@ string Notebook::read(unsigned int page_num, unsigned int row, unsigned int colu
     if (length > 99) {
         throw invalid_argument("Your message is too long");
     }
-    if (page_num < 0 || row < 0 || column < 0) {
+    if (page_num < 0 || row < 0 || column < 0 || length < 0) {
         throw invalid_argument("Please enter only positive parameters");
     }
     if (d == Direction::Horizontal) {//we will work 2 cases either writing Horizontal or Vertical
+        if(column+length > 100){
+            throw invalid_argument("Your message is too long");
+        }
         string key_to_check = to_string(page_num) + "," + to_string(row);
         string what_I_read;
         if(this->notebook.find(key_to_check) == this->notebook.end()){//row is empty!
@@ -108,10 +114,13 @@ Notebook::erase(unsigned int page_num, unsigned int row, unsigned int column, ar
     if (length > 99) {
         throw invalid_argument("Your message is too long");
     }
-    if (page_num < 0 || row < 0 || column < 0) {
+    if (page_num < 0 || row < 0 || column < 0|| length < 0) {
         throw invalid_argument("Please enter only positive parameters");
     }
     if(d== Direction::Horizontal){
+        if(column+length > 100){
+            throw invalid_argument("Your message is too long");
+        }
         string key_to_check = to_string(page_num) + "," + to_string(row);
         unsigned int column_iterator =row;
         for (int i = 0; i <length ; ++i) {

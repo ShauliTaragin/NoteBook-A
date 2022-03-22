@@ -42,6 +42,13 @@ TEST_CASE("Simple Page Test") {
             letter += char(65+i);
             CHECK(notebook.read(2,50+i,50,Direction::Horizontal, 1) == letter);
         }
+    //Lets test some large numbers
+    for (unsigned int i = 0; i <8000 ; ++i) {
+        notebook.write(2,700+i,10,Direction::Horizontal, "$");//now we check Vertically
+    }
+    for (unsigned int i = 0; i <8000 ; ++i) {
+            CHECK(notebook.read(2,700+i,10,Direction::Horizontal, 1) == "$");
+    }
 }
 
 
@@ -62,7 +69,7 @@ TEST_CASE("Test Erasing") {
             CHECK(notebook.read(1,13,15,Direction::Vertical, 5) == "__g~~");
             CHECK(notebook.read(1,16,14,Direction::Horizontal, 3) == "_~_");
             //I now want to test that even though we only wrote 1 letter in row 15 (since we wrote vertically) all row 15 is filled.
-    for (unsigned int i = 0; i <100 ; ++i) {
+    for (unsigned int i = 0; i <99 ; ++i) {
         if(i==15){
             CHECK(notebook.read(1,15,i,Direction::Horizontal, 1) == "g");
         }
