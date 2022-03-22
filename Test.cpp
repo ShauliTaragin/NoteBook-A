@@ -89,20 +89,23 @@ TEST_CASE ("Bad input - Sentence too long") {
             CHECK_THROWS(notebook.erase(1,0,15,Direction::Horizontal, 100));
             CHECK_THROWS(notebook.erase(1,17,0,Direction::Horizontal, 125));
 }
-//write test for negative numbers
-//write test for wiritng in illeagal space
-//write test for starting to write correctly and then skipping
-//TEST_CASE ("Bad input - Even number") {
-//            CHECK_THROWS(mat(10, 5, '$', '%'));
-//            CHECK_THROWS(mat(15, 2, 'a', 'g'));
-//            CHECK_THROWS(mat(2, 4, '2', '4'));
-//            CHECK_THROWS(mat(46, 100, '#', '7'));
-//}
-//TEST_CASE ("Bad input - Bad Symbol") {
-//            CHECK_THROWS(mat(13, 11, '\n', '%'));
-//            CHECK_THROWS(mat(15, 41, 'a', '\t'));
-//            CHECK_THROWS(mat(9, 57, '2', '\0'));
-//            CHECK_THROWS(mat(43, 101, ' ', '7'));
-//            CHECK_THROWS(mat(141, 55, '\r', '\0'));
-//}
+
+TEST_CASE ("Bad input - Sentence in bad location") {
+    string sentence = "Dear Diary";
+            notebook.write(7,0,15,Direction::Vertical, sentence);
+            CHECK_THROWS(notebook.write(7,0,15,Direction::Vertical, sentence));//checking that it doesn't matter where we start our sentence from
+            CHECK_THROWS(notebook.write(7,4,14,Direction::Horizontal, sentence));
+            CHECK_THROWS(notebook.write(7,7,12,Direction::Horizontal, sentence));
+            CHECK_THROWS(notebook.write(7,5,92,Direction::Horizontal, sentence));
+            CHECK_THROWS(notebook.write(7,500,99,Direction::Horizontal, sentence));
+            CHECK_THROWS(notebook.write(7,0,13,Direction::Horizontal, "abracadbra"));//test writing on writing
+            CHECK_THROWS(notebook.write(7,1,15,Direction::Vertical, "abracadbra"));
+            CHECK(notebook.read(7,0,15,Direction::Vertical, 10) == "Dear Diary");
+            CHECK(notebook.read(7,0,14,Direction::Horizontal, 3) == "_D_");
+            CHECK_THROWS(notebook.read(7,0,76,Direction::Horizontal, 30));
+            CHECK_THROWS(notebook.read(7,5,40,Direction::Horizontal, 78));
+            CHECK_THROWS(notebook.read(7,10,76,Direction::Horizontal, 30));
+            CHECK_THROWS(notebook.read(7,8,40,Direction::Horizontal, 78));
+            CHECK_THROWS(notebook.erase(1,17,17,Direction::Horizontal, 90));
+}
 
