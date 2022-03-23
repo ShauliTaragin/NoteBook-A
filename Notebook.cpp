@@ -12,6 +12,8 @@ using namespace std;
 
 using namespace ariel;
 
+const int n31 = 31;
+const int n125 = 125;
 const int n99 = 99;
 const int n100 = 100;
 
@@ -25,7 +27,7 @@ Notebook::write(int page_num, int row, int column, ariel::Direction d, string to
         throw invalid_argument("Please enter only positive parameters");
     }
     for (unsigned int i = 0; i < to_write.length(); ++i) {
-        if (to_write.at(i) == '~') {
+        if (to_write.at(i)<=n31 || to_write.at(i)>n125||to_write.at(i) == '~') {
             throw invalid_argument("Bad Character in your sentence");
         }
     }

@@ -5,10 +5,12 @@
 #include "Notebook.hpp"
 #include "Direction.hpp"
 
-#include <iostream>
 #include <stdexcept>
 using namespace std;
 using namespace ariel;
+
+const int n33 = 33;
+const int n256 = 256;
 
 ariel::Notebook notebook;
 
@@ -42,7 +44,7 @@ TEST_CASE("Simple Page Test") {
             letter += char(65+i);
             CHECK(notebook.read(2,50+i,50,Direction::Horizontal, 1) == letter);
         }
-    //Lets test some large numbers
+    //Let's test some large numbers
     for (int i = 0; i <10000 ; ++i) {
         notebook.write(2,700+i,10,Direction::Horizontal, "$");//now we check Vertically
     }
@@ -115,6 +117,7 @@ TEST_CASE ("Bad input - Sentence in bad location") {
             CHECK_THROWS(notebook.erase(7,8,40,Direction::Horizontal, 78));
             CHECK_THROWS(notebook.erase(1,17,17,Direction::Horizontal, 90));
 }
+
 TEST_CASE ("Bad input - Negative numbers") {
             CHECK_THROWS(notebook.write(7,-1,15,Direction::Vertical, "sentence"));
             CHECK_THROWS(notebook.write(-1,4,14,Direction::Vertical, "sentence"));
@@ -144,6 +147,21 @@ TEST_CASE ("Bad input - Bad Chars") {
             CHECK_THROWS(notebook.write(8,4,14,Direction::Horizontal, "fasgdas~'f"));
             CHECK_THROWS(notebook.write(8,7,12,Direction::Horizontal, "~~~"));
             CHECK_THROWS(notebook.write(8,7,12,Direction::Horizontal, "abra cadbra~"));
+            CHECK_THROWS(notebook.write(9,0,15,Direction::Vertical, "agsa\ndf"));
+            CHECK_THROWS(notebook.write(9,4,14,Direction::Horizontal, "ags\r"));
+            CHECK_THROWS(notebook.write(9,7,12,Direction::Horizontal, "for\tsg"));
+            CHECK_THROWS(notebook.write(9,7,12,Direction::Horizontal, "abra\rsf"));
+            //now we check that all the unprintable characters throw exceptions.
+    for (int i = 0; i < 32; ++i) {
+        string letter;
+        letter += char(i);
+            CHECK_THROWS(notebook.write(8,7,12,Direction::Vertical, letter));
+    }
+    for (int i = 126; i <256 ; ++i) {
+        string letter;
+        letter += char(i);
+            CHECK_THROWS(notebook.write(8,14,12,Direction::Horizontal, letter));
+    }
 
 }
 
