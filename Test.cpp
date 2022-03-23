@@ -43,10 +43,10 @@ TEST_CASE("Simple Page Test") {
             CHECK(notebook.read(2,50+i,50,Direction::Horizontal, 1) == letter);
         }
     //Lets test some large numbers
-    for (int i = 0; i <8000 ; ++i) {
+    for (int i = 0; i <10000 ; ++i) {
         notebook.write(2,700+i,10,Direction::Horizontal, "$");//now we check Vertically
     }
-    for (int i = 0; i <8000 ; ++i) {
+    for (int i = 0; i <10000 ; ++i) {
             CHECK(notebook.read(2,700+i,10,Direction::Horizontal, 1) == "$");
     }
 }
@@ -139,3 +139,11 @@ TEST_CASE ("Bad input - Negative numbers") {
             CHECK_THROWS(notebook.erase(7,10,-2,Direction::Vertical, 2));
             CHECK_THROWS(notebook.erase(7,10,2,Direction::Vertical, -4));
 }
+TEST_CASE ("Bad input - Bad Chars") {
+            CHECK_THROWS(notebook.write(8,0,15,Direction::Vertical, "~"));
+            CHECK_THROWS(notebook.write(8,4,14,Direction::Horizontal, "fasgdas~'f"));
+            CHECK_THROWS(notebook.write(8,7,12,Direction::Horizontal, "~~~"));
+            CHECK_THROWS(notebook.write(8,7,12,Direction::Horizontal, "abra cadbra~"));
+
+}
+
